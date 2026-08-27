@@ -112,7 +112,7 @@ app.post('/api/create', upload.array('photos', 6), async (req, res) => {
     const id = req.generatedId;
     const b = req.body;
 
-    if (!b.senderName || !b.siblingName || !b.message) {
+    if (!b.senderName?.trim() || !b.siblingName?.trim() || !b.message?.trim()) {
       return res.status(400).json({ error: 'Name, sibling name, and a message are required.' });
     }
 

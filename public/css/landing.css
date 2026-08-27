@@ -205,11 +205,27 @@ select option { color: var(--ink); }
 }
 
 .form-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
   background: rgba(255,255,255,0.12);
   border-left: 3px solid var(--marigold);
   padding: 0.7rem 1rem;
   border-radius: 8px;
   font-size: 0.88rem;
+}
+.form-error::before {
+  content: '!';
+  flex: 0 0 auto;
+  width: 1.15rem;
+  height: 1.15rem;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--marigold);
+  border-radius: 50%;
+  color: var(--marigold);
+  font-weight: 700;
+  line-height: 1;
 }
 
 .submit-btn {

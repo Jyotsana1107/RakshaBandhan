@@ -23,6 +23,7 @@ photoInput.addEventListener('change', () => {
 function showError(msg) {
   formError.textContent = msg;
   formError.hidden = false;
+  formError.focus();
 }
 
 async function createUploadFile(file) {
@@ -81,7 +82,9 @@ form.addEventListener('submit', async (e) => {
     resultCard.hidden = false;
     resultCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
   } catch (err) {
-    showError('Could not reach the server. Please check your connection and try again.');
+    showError(err.message === 'Could not prepare photo'
+      ? 'One of the selected photos could not be prepared. Please choose the photos again.'
+      : 'Could not reach the server. Please check your connection and try again.');
     submitBtn.disabled = false;
     submitBtn.innerHTML = 'Wrap It Up <span aria-hidden="true">&rarr;</span>';
   }
