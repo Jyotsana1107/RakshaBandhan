@@ -12,8 +12,10 @@ const DATA_FILE = path.join(__dirname, 'data', 'store.json');
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 const useBlobStorage = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
 
-if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
-if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, JSON.stringify({}));
+if (!useBlobStorage) {
+  if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+  if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, JSON.stringify({}));
+}
 
 async function readStore() {
   if (useBlobStorage) {
@@ -89,7 +91,7 @@ app.use('/api/create', (req, res, next) => {
 
 app.post('/api/create', upload.array('photos', 6), async (req, res) => {
   try {
-    const store = readStore();
+    const store = await readStore();
     const id = req.generatedId;
     const b = req.body;
 
