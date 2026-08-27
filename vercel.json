@@ -1,0 +1,7 @@
+{
+  "rewrites": [
+    { "source": "/rakhi/:id", "destination": "/rakhi.html" },
+    { "source": "/rakhi/:id/", "destination": "/rakhi.html" },
+    { "source": "/api/:path*", "destination": "/api" }
+  ]
+}

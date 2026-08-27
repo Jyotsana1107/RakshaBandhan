@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A surprise for you</title>
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/rakhi.css">
+</head>
+<body id="rakhiBody">
+
+<div class="thread-progress" aria-hidden="true">
+  <svg viewBox="0 0 100 300" preserveAspectRatio="none">
+    <path id="threadTrack" d="M50,0 C 20,40 80,80 50,120 S 20,200 50,240 L 50,300" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="3"/>
+    <path id="threadFill" d="M50,0 C 20,40 80,80 50,120 S 20,200 50,240 L 50,300" fill="none" stroke="#E8963E" stroke-width="3" stroke-linecap="round"/>
+  </svg>
+</div>
+
+<div id="loadingState" class="loading-state">
+  <div class="loading-knot"></div>
+  <p>Untying the thread...</p>
+</div>
+
+<main id="experience" class="experience" hidden>
+
+  <section class="screen screen-1" id="screen1">
+    <div class="envelope">
+      <div class="envelope-flap"></div>
+      <div class="envelope-seal"></div>
+    </div>
+    <p class="screen-greeting">Hey <span id="nameGreeting"></span>...</p>
+    <button class="btn-primary open-btn" id="openBtn">Open Your Surprise</button>
+  </section>
+
+  <div id="restOfExperience" class="rest-of-experience" hidden>
+
+    <section class="screen screen-2">
+      <p class="reveal-line line-1">I could have just sent you a Rakhi wish...</p>
+      <p class="reveal-line line-2">But you're not just another person in my life.</p>
+      <p class="reveal-line line-3" id="introMessage"></p>
+    </section>
+
+    <section class="screen screen-3">
+      <p class="eyebrow light center">Your story</p>
+      <h2 class="screen-title center">A few moments, just us</h2>
+      <div class="photo-collage" id="photoCollage"></div>
+    </section>
+
+    <section class="screen screen-4" id="memoryScreen">
+      <p class="eyebrow center">A memory</p>
+      <p class="memory-text" id="memoryText"></p>
+    </section>
+
+    <section class="screen screen-5">
+      <div class="bond-lines" id="bondLines">
+        <p class="bond-line">We've fought.</p>
+        <p class="bond-line">We've annoyed each other.</p>
+        <p class="bond-line">We've laughed at the stupidest things.</p>
+        <p class="bond-line bond-but">But through everything...</p>
+        <p class="bond-line bond-final" id="bondFinal"></p>
+      </div>
+    </section>
+
+    <section class="screen screen-6">
+      <div class="rakhi-anim">
+        <div class="wrist"></div>
+        <div class="rakhi-thread"></div>
+        <div class="rakhi-charm"></div>
+      </div>
+      <p class="screen-title center" id="rakhiHappy"></p>
+    </section>
+
+    <section class="screen screen-7" id="funnyScreen" hidden>
+      <p class="eyebrow center">One more thing</p>
+      <p class="funny-text" id="funnyText"></p>
+    </section>
+
+    <section class="screen screen-8">
+      <p class="eyebrow center">Last thing</p>
+      <button class="btn-primary last-btn" id="lastBtn">One Last Thing...</button>
+      <div class="final-message" id="finalMessage" hidden>
+        <p id="finalMessageText"></p>
+        <p class="final-signoff" id="finalSignoff"></p>
+      </div>
+      <div class="confetti" id="confetti" aria-hidden="true"></div>
+    </section>
+
+  </div>
+</main>
+
+<script src="/js/rakhi.js"></script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Some bonds deserve more than a WhatsApp message</title>
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/landing.css">
+</head>
+<body>
+
+<header class="topbar">
+  <span class="logo">Thread<span class="logo-dot">&amp;</span>Tie</span>
+</header>
+
+<main>
+  <section class="hero">
+    <p class="eyebrow">A Raksha Bandhan surprise, made by you</p>
+    <h1 class="hero-title">Some bonds deserve<br>more than a <span class="strike">WhatsApp message</span>.</h1>
+    <p class="hero-sub">Create a beautiful, personalized Raksha Bandhan surprise for your brother or sister — photos, memories, and a message only they'll understand. Delivered as one link, just for them.</p>
+    <a href="#create" class="btn-primary">Create Their Surprise <span aria-hidden="true">&rarr;</span></a>
+
+    <svg class="thread-divider" viewBox="0 0 400 60" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0,30 C 80,0 120,60 200,30 S 320,0 400,30" fill="none" stroke="var(--thread)" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </section>
+
+  <section class="preview">
+    <p class="eyebrow center">What they'll open</p>
+    <h2 class="section-title center">A phone, a link, and seven quiet moments</h2>
+    <div class="preview-strip" id="previewStrip">
+      <div class="phone-mock">
+        <div class="phone-notch"></div>
+        <div class="phone-screen s1">
+          <div class="mock-knot"></div>
+          <p class="mock-line">Hey Aditi...</p>
+          <button class="mock-btn">Open Your Surprise</button>
+        </div>
+      </div>
+      <div class="phone-mock">
+        <div class="phone-notch"></div>
+        <div class="phone-screen s2">
+          <p class="mock-line small">I could have just sent you a Rakhi wish...</p>
+          <p class="mock-line">But you're not just another person in my life.</p>
+        </div>
+      </div>
+      <div class="phone-mock">
+        <div class="phone-notch"></div>
+        <div class="phone-screen s3">
+          <div class="mock-photo mp1"></div>
+          <div class="mock-photo mp2"></div>
+        </div>
+      </div>
+      <div class="phone-mock">
+        <div class="phone-notch"></div>
+        <div class="phone-screen s6">
+          <div class="mock-rakhi"></div>
+          <p class="mock-line">Happy Raksha Bandhan, Aditi.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how">
+    <p class="eyebrow center">How it works</p>
+    <h2 class="section-title center">Three steps, one keepsake</h2>
+    <div class="how-grid">
+      <div class="how-card">
+        <span class="how-mark">Fill it in</span>
+        <p>Share your names, a message, a few photos, and the little details only siblings know.</p>
+      </div>
+      <div class="how-card">
+        <span class="how-mark">We tie it together</span>
+        <p>Your words and photos become a quiet, scroll-through experience — built just for them.</p>
+      </div>
+      <div class="how-card">
+        <span class="how-mark">Send the link</span>
+        <p>One private link. Share it on WhatsApp, Instagram, or however you'd usually say happy Rakhi.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="create" id="create">
+    <p class="eyebrow center">Create their surprise</p>
+    <h2 class="section-title center">Tell us about the two of you</h2>
+
+    <form id="rakhiForm" class="rakhi-form" novalidate>
+
+      <div class="field-row">
+        <label>
+          <span>Your name</span>
+          <input type="text" name="senderName" required maxlength="40" placeholder="e.g. Riya">
+        </label>
+        <label>
+          <span>Their name</span>
+          <input type="text" name="siblingName" required maxlength="40" placeholder="e.g. Aditi">
+        </label>
+      </div>
+
+      <div class="field-row">
+        <label>
+          <span>Relationship</span>
+          <select name="relationship">
+            <option value="Sister">Sister</option>
+            <option value="Brother">Brother</option>
+            <option value="Cousin sister">Cousin sister</option>
+            <option value="Cousin brother">Cousin brother</option>
+          </select>
+        </label>
+        <label>
+          <span>Nickname <em>(optional)</em></span>
+          <input type="text" name="nickname" maxlength="30" placeholder="What you call them">
+        </label>
+      </div>
+
+      <label class="field-block">
+        <span>Your message to them</span>
+        <textarea name="message" required maxlength="600" rows="4" placeholder="Say whatever you'd actually say..."></textarea>
+      </label>
+
+      <label class="field-block">
+        <span>A special memory <em>(optional)</em></span>
+        <textarea name="memory" maxlength="400" rows="3" placeholder="Remember when we..."></textarea>
+      </label>
+
+      <label class="field-block">
+        <span>An inside joke or funny line <em>(optional)</em></span>
+        <input type="text" name="funnyLine" maxlength="150" placeholder="Something only they'd get">
+      </label>
+
+      <label class="field-block">
+        <span>Photos <em>(3–6 works best)</em></span>
+        <input type="file" name="photos" accept="image/*" multiple id="photoInput">
+        <div class="photo-preview" id="photoPreview"></div>
+      </label>
+
+      <div id="formError" class="form-error" hidden></div>
+
+      <button type="submit" class="btn-primary submit-btn" id="submitBtn">
+        Wrap It Up <span aria-hidden="true">&rarr;</span>
+      </button>
+    </form>
+
+    <div class="result-card" id="resultCard" hidden>
+      <p class="eyebrow">It's ready</p>
+      <h3>Their surprise is live</h3>
+      <p class="result-sub">Copy the link below and send it however you'd like.</p>
+      <div class="link-row">
+        <input type="text" id="resultLink" readonly>
+        <button class="btn-secondary" id="copyBtn">Copy</button>
+      </div>
+      <div class="result-actions">
+        <a class="btn-primary" id="whatsappBtn" target="_blank" rel="noopener">Share on WhatsApp</a>
+        <a class="btn-secondary" id="viewBtn" target="_blank" rel="noopener">Preview It</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <span>Made for siblings who'd never say this out loud.</span>
+</footer>
+
+<script src="/js/landing.js"></script>
+</body>
+</html>
