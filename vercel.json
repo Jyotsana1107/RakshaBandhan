@@ -1,6 +1,13 @@
 {
-  "rewrites": [
-    { "source": "/rakhi/:id", "destination": "/rakhi.html" },
-    { "source": "/rakhi/:id/", "destination": "/rakhi.html" }
+  "version": 2,
+  "builds": [
+    {
+      "src": "server.js",
+      "use": "@vercel/node",
+      "config": { "includeFiles": ["public/**"] }
+    }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "server.js" }
   ]
 }
