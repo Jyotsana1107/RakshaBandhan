@@ -25,6 +25,21 @@ function showError(msg) {
   formError.hidden = false;
 }
 
+async function createUploadFile(file) {
+  const image = await createImageBitmap(file);
+  const maxSide = 1400;
+  const scale = Math.min(1, maxSide / Math.max(image.width, image.height));
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.round(image.width * scale);
+  canvas.height = Math.round(image.height * scale);
+  canvas.getContext('2d').drawImage(image, 0, 0, canvas.width, canvas.height);
+  image.close();
+
+  const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.78));
+  if (!blob) throw new Error('Could not prepare photo');
+  return new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
+}
+
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   formError.hidden = true;
@@ -43,6 +58,10 @@ form.addEventListener('submit', async (e) => {
   submitBtn.textContent = 'Wrapping it up...';
 
   try {
+    const photos = Array.from(photoInput.files);
+    data.delete('photos');
+    for (const photo of photos) data.append('photos', await createUploadFile(photo));
+
     const res = await fetch('/api/create', { method: 'POST', body: data });
     const json = await res.json();
 

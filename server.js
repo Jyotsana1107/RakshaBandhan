@@ -10,7 +10,19 @@ const PORT = process.env.PORT || 3000;
 
 const DATA_FILE = path.join(__dirname, 'data', 'store.json');
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
-const useBlobStorage = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+const isVercel = Boolean(process.env.VERCEL);
+const hasBlobToken = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+const useBlobStorage = isVercel || hasBlobToken;
+
+function ensureStorageConfigured() {
+  if (isVercel && !hasBlobToken) {
+    throw new Error('BLOB_READ_WRITE_TOKEN is not configured in Vercel');
+  }
+}
+
+function sendStorageError(res) {
+  res.status(503).json({ error: 'Vercel Blob storage is not configured. Add BLOB_READ_WRITE_TOKEN and redeploy.' });
+}
 
 if (!useBlobStorage) {
   if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -19,6 +31,7 @@ if (!useBlobStorage) {
 
 async function readStore() {
   if (useBlobStorage) {
+    ensureStorageConfigured();
     const result = await list({ prefix: 'data/store.json', limit: 1 });
     if (!result.blobs.length) return {};
     const response = await fetch(result.blobs[0].url);
@@ -35,6 +48,7 @@ async function readStore() {
 
 async function writeStore(store) {
   if (useBlobStorage) {
+    ensureStorageConfigured();
     await put('data/store.json', JSON.stringify(store, null, 2), {
       access: 'public',
       addRandomSuffix: false
@@ -69,7 +83,7 @@ const diskStorage = multer.diskStorage({
 
 const upload = multer({
   storage: useBlobStorage ? multer.memoryStorage() : diskStorage,
-  limits: { fileSize: 8 * 1024 * 1024, files: 6 },
+  limits: { fileSize: 2 * 1024 * 1024, files: 6 },
   fileFilter: (req, file, cb) => {
     if (/^image\//.test(file.mimetype)) cb(null, true);
     else cb(new Error('Only image files are allowed'));
@@ -86,7 +100,10 @@ app.use('/api/create', (req, res, next) => {
       req.generatedId = generateId(store);
       next();
     })
-    .catch(next);
+    .catch(err => {
+      if (err.message.includes('BLOB_READ_WRITE_TOKEN')) return sendStorageError(res);
+      next(err);
+    });
 });
 
 app.post('/api/create', upload.array('photos', 6), async (req, res) => {
@@ -126,6 +143,7 @@ app.post('/api/create', upload.array('photos', 6), async (req, res) => {
     res.json({ id, url: `/rakhi/${id}` });
   } catch (err) {
     console.error(err);
+    if (err.message.includes('BLOB_READ_WRITE_TOKEN')) return sendStorageError(res);
     res.status(500).json({ error: 'Something went wrong creating your surprise.' });
   }
 });
@@ -137,11 +155,25 @@ app.get('/api/rakhi/:id', (req, res) => {
       if (!entry) return res.status(404).json({ error: 'not found' });
       res.json(entry);
     })
-    .catch(() => res.status(500).json({ error: 'Could not read gift data' }));
+    .catch(err => {
+      if (err.message.includes('BLOB_READ_WRITE_TOKEN')) return sendStorageError(res);
+      res.status(500).json({ error: 'Could not read gift data' });
+    });
 });
 
 app.get('/rakhi/:id', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'rakhi.html'));
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  if (err.code === 'LIMIT_FILE_SIZE') {
+    return res.status(413).json({ error: 'Each photo must be smaller than 2MB.' });
+  }
+  if (err.code === 'LIMIT_FILE_COUNT') {
+    return res.status(413).json({ error: 'Please choose no more than 6 photos.' });
+  }
+  res.status(500).json({ error: 'The server could not process this request.' });
 });
 
 if (require.main === module) {

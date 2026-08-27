@@ -56,14 +56,13 @@ public/
 
 ## Notes for going further
 
-- **Deploying**: any Node host works (Render, Railway, a small VPS). Point
   persistent disk storage at `uploads/` and `data/store.json`, or swap the
   JSON file for a real database later — the `readStore`/`writeStore`
   functions in `server.js` are the only place that would need to change.
-- **Payments**: the form currently creates a link for free. To gate creation
   behind payment, add a checkout step before the `POST /api/create` call and
   verify payment server-side before writing the submission.
-- **Optional fields**: nickname, memory, and the inside-joke line are all
   optional — the experience quietly removes those sections when they're
   empty rather than showing them blank.
-- Photo uploads are capped at 6 files, 8MB each, images only.
+ Photo uploads are capped at 6 files, 2MB each, images only. Photos are resized
+ in the browser before upload so the app stays within Vercel's serverless
+ request-size limit.
